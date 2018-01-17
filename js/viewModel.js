@@ -117,6 +117,8 @@ function viewModel() {
       });
       // push the new marker to the array of markers
       self.markers.push(marker);
+
+      // event listener to open the infowindow for the marker
     }
 
   }
@@ -164,7 +166,12 @@ function viewModel() {
   self.initMap();
 };
 
-
+google.maps.event.addDomListener(window, 'load', viewModel.initMap);
+google.maps.event.addDomListener(window, 'resize', function() {
+  var center = map.getCenter();
+  google.maps.event.trigger(map, 'resize');
+  map.setCenter(center);
+});
 
 ko.applyBindings(new viewModel);
 
