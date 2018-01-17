@@ -64,14 +64,20 @@ body {
   width: 175px;
 }
 
+#visibleLocations {
+  position: relative;
+  height: 300px;
+}
+
 
 /* MEDIA QUERIES FOR RESPONSIVENESS */
 
 @media only screen and (max-width: 700px) {
   #map {
+    height: 40%;
     bottom: 0px;
     width: 100%;
-    top: 300px;
+    top: 525px;
     left: 0px;
     position: absolute;
     right: 0px;
@@ -80,6 +86,7 @@ body {
   .options-box {
     width: 100%;
     text-align: left;
-    height: 278px;
+    height: 525px;
   }
+
 }

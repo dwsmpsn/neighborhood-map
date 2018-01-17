@@ -7,9 +7,11 @@
 <body>
   <div class="container">
     <div class="options-box">
-      <h1>Welcome to Dylan's Neighborhood</h1>
-      <span class="text">Find your new favorite spots!</span>
-      <div>
+      <div id='title'>
+        <h1>Welcome to Dylan's Neighborhood</h1>
+        <span class="text">Find your new favorite spots!</span>
+      </div>
+      <div id='search'>
         <hr>
         <br>
         <button id="show-all" data-bind='click: showAll'>Show All</button>
@@ -27,6 +29,13 @@
         <div>
           <p>You have selected: <b><span data-bind="text: selectedCategory"></span></b></p>
         </div>
+        <hr>
+        <br>
+        <div class='text' id='visibleLocations'>
+          <ul>
+            
+          </ul>
+        </div>
       </div>
     </div>
     <div id="map"></div>
@@ -35,7 +44,7 @@
 
   <script src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyDs24eunuzO-4wyHQ96hMG6Y8jpqKC0HqA&v=3" onerror="googleError()"></script><!-- change callback to initMap or &callback=viewModel-->
   <script src="js/knockout-3.4.2.js"></script>
-  <script async defer src="js/viewModel.js"></script>
+  <script src="js/viewModel.js"></script>
   
 </body>
 </html>

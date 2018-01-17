@@ -14,7 +14,6 @@ function viewModel() {
   // subscription to the observable which executes a
   //filter based on the selection
   self.selectedCategory.subscribe(function() {
-    console.log(self.selectedCategory());
     if (self.selectedCategory() == 'Food') {
       self.switchOn('Food');
     } else if (self.selectedCategory() == 'Entertainment') {
@@ -136,6 +135,8 @@ function viewModel() {
         self.markers.push(marker);
       }());
     }
+    // calling show all to populate markers and side list
+    self.showAll();
   }
 
   // function to populate the infowindow when a marker is clicked
@@ -193,12 +194,15 @@ function viewModel() {
 
   // loops through markers array and populates the map
   self.showAll = function() {
+    var listItems = '';
     for (var i = 0; i < self.markers.length; i++) {
       self.markers[i].setMap(map);
+      listItems += '<li>' + self.markers[i].title + '</li>';
     }
     // resets selection back to default when showing all
     // locations again
     self.selectedCategory(null);
+    document.getElementById('visibleLocations').innerHTML = listItems;
   }
 
   // loops through markers array and hides them from the map
@@ -210,14 +214,18 @@ function viewModel() {
 
   // switch on certain marker types
   self.switchOn = function(category) {
+    var listItems = '';
     for (var i = 0; i < self.markers.length; i++) {
       if (self.markers[i].category == category) {
         self.markers[i].setMap(map);
+        listItems += '<li>' + self.markers[i].title + '</li>';
       } else {
         self.markers[i].setMap(null);
       }
     }
+    document.getElementById('visibleLocations').innerHTML = listItems;
   }
+
 
   google.maps.event.addDomListener(window, 'load', self.initMap);
   google.maps.event.addDomListener(window, 'resize', function() {
@@ -233,7 +241,6 @@ function viewModel() {
     map.setCenter(center);
   });
 
-  self.initMap();
 };
 
 
