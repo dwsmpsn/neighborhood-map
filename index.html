@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dylan's Neighborhood Map</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="options-box">
+      <h1>Welcome to Dylan's Neighborhood</h1>
+      <span class="text">Find your new favorite spots!</span>
+      <div>
+        <hr>
+        <br>
+        <button id="show-all" data-bind='click: showAll'>Show All</button>
+        <button id="hide-all" data-bind='click: hideAll'>Hide All</button>
+        <hr>
+        <br>
+        <div>
+          <span class="text">Choose to filter locations types:</span>
+          <select id="filter-location" data-bind="options: categories,
+                             optionsCaption: 'Choose one...',
+                             value: selectedCategory,
+                             valueAllowUnset: true"></select>
+        </div>
+        <br>
+        <div>
+          <p>You have selected: <b><span data-bind="text: selectedCategory"></span></b></p>
+        </div>
+      </div>
+    </div>
+    <div id="map"></div>
+  </div>
+
+
+  <script src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyDs24eunuzO-4wyHQ96hMG6Y8jpqKC0HqA&v=3" onerror="googleError()"></script><!-- change callback to initMap or &callback=viewModel-->
+  <script src="js/knockout-3.4.2.js"></script>
+  <!--<script async defer src="js/model.js"></script>-->
+  <script async defer src="js/viewModel.js"></script>
+  
+</body>
+</html>
