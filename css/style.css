@@ -29,6 +29,11 @@ body {
   width: 253px;
 }
 
+#pano {
+  width: 200px;
+  height: 200px;
+}
+
 .text {
   font-size: 14px;
 }

@@ -30,7 +30,7 @@ function viewModel() {
   self.locations = ko.observableArray([
     { 
       title: 'Pequod\'s Pizza', 
-      location: {lat: 41.9217965, lng: -87.66430749999999}, 
+      location: {lat: 41.921914, lng: -87.664307}, 
       type: 'Food'
     },{
       title: 'Kuma\'s Too',
@@ -58,7 +58,7 @@ function viewModel() {
       type: 'Entertainment'
     },{
       title: 'Micro Center',
-      location: {lat: 41.930834, lng: -87.682755},
+      location: {lat: 41.930364, lng: -87.683174},
       type: 'Shopping'
     },{
       title: 'Chicago Music Exchange',
@@ -152,7 +152,7 @@ function viewModel() {
       var radius = 50;
       // if status is OK, computer position of streetview image, calculate heading,
       // get panorama from that
-      function getStreetview(data, status) {
+      self.getStreetView = function(data, status) {
         if (status == google.maps.StreetViewStatus.OK) {
           var nearStreetViewLocation = data.location.latLng;
           var heading = google.maps.geometry.spherical.computeHeading(
@@ -162,7 +162,7 @@ function viewModel() {
             position: nearStreetViewLocation,
             pov: {
               heading: heading,
-              pitch: 30
+              pitch: 10
             }
           };
           var panorama = new google.maps.StreetViewPanorama(
@@ -171,9 +171,9 @@ function viewModel() {
           infowindow.setContent('<div>' + marker.title + '</div>' + 
             '<div>No Street View Found</div>');
         }
-      }
+      };
       // use streetview service to get closest image within 50m of marker
-      streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView;
+      streetViewService.getPanoramaByLocation(marker.position, radius, self.getStreetView);
       // open infowindow on correct marker
       infowindow.open(map, marker);
     }
@@ -219,15 +219,24 @@ function viewModel() {
     }
   }
 
+  google.maps.event.addDomListener(window, 'load', self.initMap);
+  google.maps.event.addDomListener(window, 'resize', function() {
+    var center = map.getCenter();
+    var bounds = new google.maps.LatLngBounds();
+    // extend the boundaries of the map for each marker
+    for (var i = 0; i < self.markers.length; i++) {
+      bounds.extend(self.markers[i].position);
+    }
+    map.fitBounds(bounds);
+    // move center of map with window resize
+    google.maps.event.trigger(map, 'resize');
+    map.setCenter(center);
+  });
+
   self.initMap();
 };
 
-google.maps.event.addDomListener(window, 'load', viewModel.initMap);
-google.maps.event.addDomListener(window, 'resize', function() {
-  var center = map.getCenter();
-  google.maps.event.trigger(map, 'resize');
-  map.setCenter(center);
-});
+
 
 ko.applyBindings(new viewModel);
 
