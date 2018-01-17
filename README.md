@@ -11,3 +11,4 @@
 - https://developers.google.com/maps/documentation/javascript/markers
 - https://www.tutorialspoint.com/knockoutjs/options-binding.htm
 - https://stackoverflow.com/questions/24875414/addeventlistener-change-and-option-selection
+- https://stackoverflow.com/questions/19586137/addeventlistener-using-for-loop-and-passing-values
