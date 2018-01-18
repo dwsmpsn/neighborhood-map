@@ -246,6 +246,7 @@ function viewModel() {
     for (var i = 0; i < self.markers.length; i++) {
       self.markers[i].setMap(null);
     }
+    document.getElementById('visibleLocations').innerHTML = null;
   }
 
   // switch on certain marker types
