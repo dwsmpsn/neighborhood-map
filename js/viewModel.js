@@ -121,19 +121,25 @@ function viewModel() {
         });
 
         // event listener to open the infowindow for the marker
-        marker.addListener('click', function() {
-          self.populateInfoWindow(this, largeInfoWindow);
-        });
+        marker.addListener('click', populateWorkaround());
 
         // listener events to highlight markers
-        marker.addListener('mouseover', function() {
-          this.setIcon(highlightedIcon);
-        });
-        marker.addListener('mouseout', function() {
-          this.setIcon(resultIcon);
-        });
+        marker.addListener('mouseover', setIconWorkaround(highlightedIcon));
+        marker.addListener('mouseout', setIconWorkaround(resultIcon));
         // push the new marker to the array of markers
         self.markers.push(marker);
+      }
+
+      function populateWorkaround() {
+        return function() {
+          self.populateInfoWindow(this, largeInfoWindow);
+        }
+      }
+
+      function setIconWorkaround(icon) {
+        return function() {
+          this.setIcon(icon);
+        }
       }
     };
 
