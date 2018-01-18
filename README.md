@@ -16,14 +16,20 @@ I used the Foursquare API to call up the phone number for each location, which i
 
 - http://knockoutjs.com/documentation/introduction.html
 
-#### 1/16/2018
+### 1/16/2018
 
 - http://knockoutjs.com/documentation/click-binding.html
 - https://developers.google.com/maps/documentation/javascript/markers
 - https://www.tutorialspoint.com/knockoutjs/options-binding.htm
 - https://stackoverflow.com/questions/24875414/addeventlistener-change-and-option-selection
 
-#### 1/17/2018
+### 1/17/2018
 - https://stackoverflow.com/questions/19586137/addeventlistener-using-for-loop-and-passing-values
 - https://stackoverflow.com/questions/27816682/setting-google-maps-api-v3-zoom-level-based-on-screen-device-width
 - https://stackoverflow.com/questions/7939063/trying-to-use-json-value-outside-getjson-function
+
+### 1/18/2018
+#### Review suggestion fixes:
+- https://stackoverflow.com/questions/13664499/how-to-filter-using-a-dropdown-in-knockout
+- https://developers.google.com/maps/documentation/javascript/markers#animate
+- http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
