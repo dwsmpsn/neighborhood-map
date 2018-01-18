@@ -3,6 +3,12 @@ var largeInfoWindow;
 var clientID = 'LERAAYP3BV01BQZY0FLIBIBCM0U40FZEWLLEL03C2QR0NI2V';
 var clientSecret = '1TZ0ZLXEZ33DA3E2KF3MLMYHL2DDSWQGS10EW1L0ZG2BVQ1L';
 
+// styling default and highlighted markers
+var foodIcon;
+var entertainmentIcon;
+var shoppingIcon;
+var highlightedIcon;
+
 // viewModel for use in Knockout bindings
 function ViewModel() {
   var self = this;
@@ -97,69 +103,80 @@ function ViewModel() {
 
 
     // styling default and highlighted markers
-    var foodIcon = self.makeMarkerIcon('0091ff');
-    var entertainmentIcon = self.makeMarkerIcon('ff670f');
-    var shoppingIcon = self.makeMarkerIcon('20b21e');
-    var highlightedIcon = self.makeMarkerIcon('FFFF24');
+    foodIcon = self.makeMarkerIcon('0091ff');
+    entertainmentIcon = self.makeMarkerIcon('ff670f');
+    shoppingIcon = self.makeMarkerIcon('20b21e');
+    highlightedIcon = self.makeMarkerIcon('FFFF24');
 
-    // uses the array of locations to create an array of markers
-    // added anonymous function for closure
-    self.createMarkerArray = function() {
-      for (var i = 0; i < self.locations().length; i++) {
-        var resultIcon;
-        if (self.locations()[i].type === 'Food') {
-          resultIcon = foodIcon;
-        } else if (self.locations()[i].type === 'Entertainment') {
-          resultIcon = entertainmentIcon;
-        } else {
-          resultIcon = shoppingIcon;
-        }
-        
-        // get the location from the array
-        var position = self.locations()[i].location;
-        var title = self.locations()[i].title;
-        // grabbing the location category
-        var category = self.locations()[i].type;
-        // create a marker for each location and push to array
-        var marker = new google.maps.Marker({
-          map: map,
-          position: position,
-          title: title,
-          category: category,
-          icon: resultIcon,
-          animation: google.maps.Animation.DROP,
-          id: i
-        });
-
-        // event listener to open the infowindow for the marker
-        marker.addListener('click', self.populateWorkaround());
-
-        // listener events to highlight markers
-        marker.addListener('mouseover', self.setIconWorkaround(highlightedIcon));
-        marker.addListener('mouseout', self.setIconWorkaround(resultIcon));
-        // push the new marker to the array of markers
-        self.markers().push(marker);
+    // creating the marker array -- I removed the for loop inside and then 
+    // created a separate for loop to run the function in afterwards
+    self.createMarkerArray = function(index) {
+      var resultIcon;
+      if (self.locations()[index].type === 'Food') {
+        resultIcon = foodIcon;
+      } else if (self.locations()[index].type === 'Entertainment') {
+        resultIcon = entertainmentIcon;
+      } else {
+        resultIcon = shoppingIcon;
       }
-
       
+      // get the location from the array
+      var position = self.locations()[index].location;
+      var title = self.locations()[index].title;
+      // grabbing the location category
+      var category = self.locations()[index].type;
+      // create a marker for each location and push to array
+      var marker = new google.maps.Marker({
+        map: map,
+        position: position,
+        title: title,
+        category: category,
+        icon: resultIcon,
+        origIcon: resultIcon,
+        animation: google.maps.Animation.DROP,
+        id: index
+      });
+
+      function toggleBounce() {
+        if (marker.getAnimation() !== null) {
+          marker.setAnimation(null);
+        } else {
+          marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+      };
+
+      // event listener to open the infowindow for the marker
+      marker.addListener('click', self.populateWorkaround());
+      marker.addListener('click', toggleBounce);
+
+      // listener events to highlight markers
+      marker.addListener('mouseover', self.setIconWorkaround(highlightedIcon));
+      marker.addListener('mouseout', self.setIconWorkaround(resultIcon));
+      // push the new marker to the array of markers
+      self.markers().push(marker);
     };
 
-    self.createMarkerArray();
+    for (var i = 0; i < self.locations().length; i++) {
+      self.createMarkerArray(i);
+    }
     // calling show all to populate markers and side list
     self.showAll();
   };
+
+
 
   self.populateWorkaround = function() {
     return function() {
       self.populateInfoWindow(this, largeInfoWindow);
     };
-  }
+  };
 
   self.setIconWorkaround = function(icon) {
     return function() {
       this.setIcon(icon);
     };
-  }
+  };
+
 
   // function to populate the infowindow when a marker is clicked
   self.populateInfoWindow = function(marker, infowindow) {
@@ -170,6 +187,7 @@ function ViewModel() {
       // clear out marker property when infowindow closes
       infowindow.addListener('closeclick', function() {
         infowindow.marker = null;
+        marker.setAnimation(null);
       });
       var streetViewService = new google.maps.StreetViewService();
       var radius = 50;
@@ -180,10 +198,6 @@ function ViewModel() {
           var nearStreetViewLocation = data.location.latLng;
           var heading = google.maps.geometry.spherical.computeHeading(
             nearStreetViewLocation, marker.position);
-          //infowindow.setContent('<div>' + marker.title + 
-          //  '</div><div id="pano"></div>');
-
-
 
           var panoramaOptions = {
             position: nearStreetViewLocation,
@@ -248,23 +262,20 @@ function ViewModel() {
 
   // loops through markers array and populates the map
   self.showAll = function() {
-    var listItems = '';
     for (var i = 0; i < self.markers().length; i++) {
       self.markers()[i].setMap(map);
-      listItems += '<li>' + self.markers()[i].title + '</li>';
     }
     // resets selection back to default when showing all
     // locations again
     self.selectedCategory(null);
-    //document.getElementById('visibleLocations').innerHTML = listItems;
   };
 
   // loops through markers array and hides them from the map
   self.hideAll = function() {
+    self.selectedCategory(null);
     for (var i = 0; i < self.markers().length; i++) {
       self.markers()[i].setMap(null);
     }
-    //document.getElementById('visibleLocations').innerHTML = null;
   };
 
 

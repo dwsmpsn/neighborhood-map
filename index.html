@@ -34,7 +34,8 @@
         <br>
         <div class='text' id='visibleLocations'>
           <ul data-bind="foreach: filteredList">
-            <li data-bind="text: title">
+            <li>
+              <button data-bind="text: title, click: $parent.populateInfoWindow"></button>
             </li>
           </ul>
         </div>
