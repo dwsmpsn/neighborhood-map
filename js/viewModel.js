@@ -30,11 +30,11 @@ function ViewModel() {
       }
       return self.markers();
     } else {
-      for (i = 0; i < self.markers().length; i++) {
-        if (self.markers()[i].category != filter) {
-          self.markers()[i].setMap(null);
+      for (var j = 0; j < self.markers().length; j++) {
+        if (self.markers()[j].category != filter) {
+          self.markers()[j].setMap(null);
         } else {
-          self.markers()[i].setMap(map);
+          self.markers()[j].setMap(map);
         }
       }
       return ko.utils.arrayFilter(self.markers(), function(i) {
