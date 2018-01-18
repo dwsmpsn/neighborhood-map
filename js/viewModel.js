@@ -7,23 +7,22 @@ function ViewModel() {
   var self = this;
 
   // array to store created markers
-  self.markers = [];
+  self.markers = ko.observableArray([]);
 
   // an array of categories for use in the dropdown menu
   self.categories = ko.observableArray(['Food', 'Entertainment', 'Shopping']);
   // observable for the dropdown selection to populate
-  self.selectedCategory = ko.observable();
-  // subscription to the observable which executes a
-  //filter based on the selection
-  self.selectedCategory.subscribe(function() {
-    if (self.selectedCategory() == 'Food') {
-      self.switchOn('Food');
-    } else if (self.selectedCategory() == 'Entertainment') {
-      self.switchOn('Entertainment');
-    } else if (self.selectedCategory() == 'Shopping') {
-      self.switchOn('Shopping');
+  self.selectedCategory = ko.observable('');
+  self.visibleLocations = ko.observableArray([]);
+
+  self.filteredLocations = ko.computed(function() {
+    var filter = self.selectedCategory();
+    if (!filter) {
+      return self.markers();
     } else {
-      self.showAll();
+      return ko.utils.arrayFilter(self.markers(), function(i) {
+        return i.category == filter;
+      });
     }
   });
 
@@ -32,43 +31,53 @@ function ViewModel() {
     { 
       title: 'Pequod\'s Pizza', 
       location: {lat: 41.921914, lng: -87.664307}, 
-      type: 'Food'
+      type: 'Food',
+      isVisible: ko.observable(true)
     },{
       title: 'Kuma\'s Too',
       location: {lat: 41.933072, lng: -87.646153},
-      type: 'Food'
+      type: 'Food',
+      isVisible: ko.observable(true)
     },{
       title: 'Piece Brewery and Pizzeria',
       location: {lat: 41.910484, lng: -87.676154},
-      type: 'Food'
+      type: 'Food',
+      isVisible: ko.observable(true)
     },{
       title: 'Cheesie\'s Pub & Grub',
       location: {lat: 41.940897, lng: -87.653883},
-      type: 'Food'
+      type: 'Food',
+      isVisible: ko.observable(true)
     },{
       title: 'Concord Music Hall',
       location: {lat: 41.918797, lng: -87.690044},
-      type: 'Entertainment'
+      type: 'Entertainment',
+      isVisible: ko.observable(true)
     },{
       title: 'Music Box Theatre',
       location: {lat: 41.950181, lng: -87.663821},
-      type: 'Entertainment'
+      type: 'Entertainment',
+      isVisible: ko.observable(true)
     },{
       title: 'Lincoln Hall',
       location: {lat: 41.925994, lng: -87.649752},
-      type: 'Entertainment'
+      type: 'Entertainment',
+      isVisible: ko.observable(true)
     },{
       title: 'Micro Center',
       location: {lat: 41.930364, lng: -87.683174},
-      type: 'Shopping'
+      type: 'Shopping',
+      isVisible: ko.observable(true)
     },{
       title: 'Chicago Music Exchange',
       location: {lat: 41.942188, lng: -87.670538},
-      type: 'Shopping'
+      type: 'Shopping',
+      isVisible: ko.observable(true)
     },{
       title: 'Dave\'s Records',
       location: {lat: 41.929851, lng: -87.643366},
-      type: 'Shopping'
+      type: 'Shopping',
+      isVisible: ko.observable(true)
     }
   ]);
 
@@ -127,7 +136,7 @@ function ViewModel() {
         marker.addListener('mouseover', setIconWorkaround(highlightedIcon));
         marker.addListener('mouseout', setIconWorkaround(resultIcon));
         // push the new marker to the array of markers
-        self.markers.push(marker);
+        self.markers().push(marker);
       }
 
       function populateWorkaround() {
@@ -195,14 +204,12 @@ function ViewModel() {
           // but I survived.
           $.getJSON(requestURL).done(function(input) {
             var venuePhone = input.response.venues[0].contact.formattedPhone;
-            console.log(venuePhone);
             infowindow.setContent('<div>' + marker.title + 
               '</div><div id="pano"></div><div>Phone Number: <span id="phone">' +
               venuePhone + '</span></div>');
             // putting the panorama in the infowindow
             var panorama = new google.maps.StreetViewPanorama(
               document.getElementById('pano'), panoramaOptions);
-            console.log(venuePhone);
           }).fail(function() {
             console.log('oops');
           });
@@ -238,36 +245,22 @@ function ViewModel() {
   // loops through markers array and populates the map
   self.showAll = function() {
     var listItems = '';
-    for (var i = 0; i < self.markers.length; i++) {
-      self.markers[i].setMap(map);
-      listItems += '<li>' + self.markers[i].title + '</li>';
+    for (var i = 0; i < self.markers().length; i++) {
+      self.markers()[i].setMap(map);
+      listItems += '<li>' + self.markers()[i].title + '</li>';
     }
     // resets selection back to default when showing all
     // locations again
     self.selectedCategory(null);
-    document.getElementById('visibleLocations').innerHTML = listItems;
+    //document.getElementById('visibleLocations').innerHTML = listItems;
   };
 
   // loops through markers array and hides them from the map
   self.hideAll = function() {
-    for (var i = 0; i < self.markers.length; i++) {
-      self.markers[i].setMap(null);
+    for (var i = 0; i < self.markers().length; i++) {
+      self.markers()[i].setMap(null);
     }
-    document.getElementById('visibleLocations').innerHTML = null;
-  };
-
-  // switch on certain marker types
-  self.switchOn = function(category) {
-    var listItems = '';
-    for (var i = 0; i < self.markers.length; i++) {
-      if (self.markers[i].category == category) {
-        self.markers[i].setMap(map);
-        listItems += '<li>' + self.markers[i].title + '</li>';
-      } else {
-        self.markers[i].setMap(null);
-      }
-    }
-    document.getElementById('visibleLocations').innerHTML = listItems;
+    //document.getElementById('visibleLocations').innerHTML = null;
   };
 
 
@@ -276,8 +269,8 @@ function ViewModel() {
     var center = map.getCenter();
     var bounds = new google.maps.LatLngBounds();
     // extend the boundaries of the map for each marker
-    for (var i = 0; i < self.markers.length; i++) {
-      bounds.extend(self.markers[i].position);
+    for (var i = 0; i < self.markers().length; i++) {
+      bounds.extend(self.markers()[i].position);
     }
     map.fitBounds(bounds);
     // move center of map with window resize
