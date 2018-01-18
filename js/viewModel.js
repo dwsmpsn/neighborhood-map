@@ -134,7 +134,7 @@ function viewModel() {
         });
         // push the new marker to the array of markers
         self.markers.push(marker);
-      };
+      }
     };
 
     self.createMarkerArray();
