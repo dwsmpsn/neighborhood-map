@@ -1,7 +1,7 @@
 var map;
 var largeInfoWindow;
-var clientID = 'LERAAYP3BV01BQZY0FLIBIBCM0U40FZEWLLEL03C2QR0NI2V';
-var clientSecret = '1TZ0ZLXEZ33DA3E2KF3MLMYHL2DDSWQGS10EW1L0ZG2BVQ1L';
+var clientID = "LERAAYP3BV01BQZY0FLIBIBCM0U40FZEWLLEL03C2QR0NI2V";
+var clientSecret = "1TZ0ZLXEZ33DA3E2KF3MLMYHL2DDSWQGS10EW1L0ZG2BVQ1L";
 
 // styling default and highlighted markers
 var foodIcon;
@@ -42,6 +42,18 @@ function ViewModel() {
       });
     }
   });
+
+  self.selectedListItem = function(item) {
+    var marker = item;
+    self.populateInfoWindow(marker, largeInfoWindow);
+    for (var i = 0; i < self.markers().length; i++) {
+      if (self.markers()[i] == marker) {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+      } else {
+        self.markers()[i].setAnimation(null);
+      }
+    }
+  };
 
 
   // a collection of some of my favorite places on the north side
@@ -137,17 +149,25 @@ function ViewModel() {
         id: index
       });
 
-      function toggleBounce() {
+      // function to toggle bouncing animation on markers
+      self.toggleBounce = function() {
+        // loop to turn off any other bounce animations when a new
+        // marker is selected
+        for (var i = 0; i < self.markers().length; i++) {
+          self.markers()[i].setAnimation(null);
+        }
+        // if marker is bouncing, stop it
         if (marker.getAnimation() !== null) {
           marker.setAnimation(null);
         } else {
+          // if it isn't bouncing, start it
           marker.setAnimation(google.maps.Animation.BOUNCE);
         }
       };
 
       // event listener to open the infowindow for the marker
       marker.addListener('click', self.populateWorkaround());
-      marker.addListener('click', toggleBounce);
+      marker.addListener('click', self.toggleBounce);
 
       // listener events to highlight markers
       marker.addListener('mouseover', self.setIconWorkaround(highlightedIcon));
@@ -162,7 +182,6 @@ function ViewModel() {
     // calling show all to populate markers and side list
     self.showAll();
   };
-
 
 
   self.populateWorkaround = function() {
@@ -229,7 +248,7 @@ function ViewModel() {
             var panorama = new google.maps.StreetViewPanorama(
               document.getElementById('pano'), panoramaOptions);
           }).fail(function() {
-            console.log('oops');
+            window.alert('Foursquare information could not be retrieved. Please refresh to try again.');
           });
           // END FOURSQUARE EXPERIMENT //
 
@@ -294,7 +313,6 @@ function ViewModel() {
   });
 
 }
-
 
 
 ko.applyBindings(new ViewModel());
