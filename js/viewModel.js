@@ -1,4 +1,6 @@
 var map;
+var clientID = 'LERAAYP3BV01BQZY0FLIBIBCM0U40FZEWLLEL03C2QR0NI2V';
+var clientSecret = '1TZ0ZLXEZ33DA3E2KF3MLMYHL2DDSWQGS10EW1L0ZG2BVQ1L';
 
 // viewModel for use in Knockout bindings
 function viewModel() {
@@ -151,14 +153,18 @@ function viewModel() {
       });
       var streetViewService = new google.maps.StreetViewService();
       var radius = 50;
-      // if status is OK, computer position of streetview image, calculate heading,
+      // if status is OK, compute position of streetview image, calculate heading,
       // get panorama from that
       self.getStreetView = function(data, status) {
         if (status == google.maps.StreetViewStatus.OK) {
           var nearStreetViewLocation = data.location.latLng;
           var heading = google.maps.geometry.spherical.computeHeading(
             nearStreetViewLocation, marker.position);
-          infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+          //infowindow.setContent('<div>' + marker.title + 
+          //  '</div><div id="pano"></div>');
+
+
+
           var panoramaOptions = {
             position: nearStreetViewLocation,
             pov: {
@@ -166,13 +172,43 @@ function viewModel() {
               pitch: 10
             }
           };
-          var panorama = new google.maps.StreetViewPanorama(
-            document.getElementById('pano'), panoramaOptions);
+
+          // FOURSQUARE EXPERIMENTING
+          // my map center Lat/Long, just to use for proximity
+          var near = '41.932272,-87.668119';
+          var name = marker.title;
+          // stripping the spaces out of the venue name
+          name = name.replace(/\s/g, '');
+          // constructing the URL that will make the API call
+          var requestURL = 'https://api.foursquare.com/v2/venues/search?ll=' +
+            near + '&client_id=' + clientID + '&client_secret=' + clientSecret + 
+            '&query=' + name + '&v=20180117';
+
+          // a very frustrating exercise in Foursquare API usage,
+          // but I survived.
+          $.getJSON(requestURL).done(function(input) {
+            var venuePhone = input.response.venues[0].contact.formattedPhone;
+            console.log(venuePhone);
+            infowindow.setContent('<div>' + marker.title + 
+              '</div><div id="pano"></div><div>Phone Number: <span id="phone">' +
+              venuePhone + '</span></div>');
+            // putting the panorama in the infowindow
+            var panorama = new google.maps.StreetViewPanorama(
+              document.getElementById('pano'), panoramaOptions);
+            console.log(venuePhone);
+          }).fail(function() {
+            console.log('oops');
+          })
+          // END FOURSQUARE EXPERIMENT //
+
+          
         } else {
           infowindow.setContent('<div>' + marker.title + '</div>' + 
             '<div>No Street View Found</div>');
         }
       };
+
+
       // use streetview service to get closest image within 50m of marker
       streetViewService.getPanoramaByLocation(marker.position, radius, self.getStreetView);
       // open infowindow on correct marker

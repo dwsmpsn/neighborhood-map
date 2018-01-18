@@ -15,3 +15,5 @@
 
 ## 1/17/2018
 - https://stackoverflow.com/questions/19586137/addeventlistener-using-for-loop-and-passing-values
+- https://stackoverflow.com/questions/27816682/setting-google-maps-api-v3-zoom-level-based-on-screen-device-width
+- https://stackoverflow.com/questions/7939063/trying-to-use-json-value-outside-getjson-function
