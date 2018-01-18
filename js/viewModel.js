@@ -133,13 +133,13 @@ function viewModel() {
       function populateWorkaround() {
         return function() {
           self.populateInfoWindow(this, largeInfoWindow);
-        }
+        };
       }
 
       function setIconWorkaround(icon) {
         return function() {
           this.setIcon(icon);
-        }
+        };
       }
     };
 
