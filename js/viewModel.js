@@ -30,7 +30,7 @@ function ViewModel() {
       }
       return self.markers();
     } else {
-      for (var i = 0; i < self.markers().length; i++) {
+      for (i = 0; i < self.markers().length; i++) {
         if (self.markers()[i].category != filter) {
           self.markers()[i].setMap(null);
         } else {
