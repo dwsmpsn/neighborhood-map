@@ -3,7 +3,7 @@ var clientID = 'LERAAYP3BV01BQZY0FLIBIBCM0U40FZEWLLEL03C2QR0NI2V';
 var clientSecret = '1TZ0ZLXEZ33DA3E2KF3MLMYHL2DDSWQGS10EW1L0ZG2BVQ1L';
 
 // viewModel for use in Knockout bindings
-function viewModel() {
+function ViewModel() {
   var self = this;
 
   // array to store created markers
@@ -289,5 +289,5 @@ function viewModel() {
 
 
 
-ko.applyBindings(new viewModel());
+ko.applyBindings(new ViewModel());
 

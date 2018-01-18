@@ -3,6 +3,7 @@
 <head>
   <title>Dylan's Neighborhood Map</title>
   <link rel="stylesheet" type="text/css" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
   <div class="container">
@@ -41,10 +42,10 @@
     <div id="map"></div>
   </div>
 
-  <script async src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyDs24eunuzO-4wyHQ96hMG6Y8jpqKC0HqA&v=3" onerror="googleError()"></script><!-- change callback to initMap or &callback=viewModel-->
+  
   <script src="js/knockout-3.4.2.js"></script>
   <script src="js/viewModel.js"></script>
-  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script async src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyDs24eunuzO-4wyHQ96hMG6Y8jpqKC0HqA&v=3&callback=ViewModel" onerror="googleError()"></script><!-- change callback to initMap or &callback=viewModel-->
 </body>
 </html>
