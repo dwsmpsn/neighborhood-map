@@ -10,7 +10,7 @@ function viewModel() {
   self.markers = [];
 
   // an array of categories for use in the dropdown menu
-  self.categories = ko.observableArray(['Food', 'Entertainment', 'Shopping'])
+  self.categories = ko.observableArray(['Food', 'Entertainment', 'Shopping']);
   // observable for the dropdown selection to populate
   self.selectedCategory = ko.observable();
   // subscription to the observable which executes a
@@ -139,7 +139,7 @@ function viewModel() {
     }
     // calling show all to populate markers and side list
     self.showAll();
-  }
+  };
 
   // function to populate the infowindow when a marker is clicked
   self.populateInfoWindow = function(marker, infowindow) {
@@ -198,7 +198,7 @@ function viewModel() {
             console.log(venuePhone);
           }).fail(function() {
             console.log('oops');
-          })
+          });
           // END FOURSQUARE EXPERIMENT //
 
           
@@ -214,7 +214,7 @@ function viewModel() {
       // open infowindow on correct marker
       infowindow.open(map, marker);
     }
-  }
+  };
 
   // creates a new marker icon
   self.makeMarkerIcon =function(markerColor) {
@@ -226,7 +226,7 @@ function viewModel() {
       new google.maps.Point(10, 34),
       new google.maps.Size(21, 34));
     return markerImage;
-  }
+  };
 
   // loops through markers array and populates the map
   self.showAll = function() {
@@ -239,7 +239,7 @@ function viewModel() {
     // locations again
     self.selectedCategory(null);
     document.getElementById('visibleLocations').innerHTML = listItems;
-  }
+  };
 
   // loops through markers array and hides them from the map
   self.hideAll = function() {
@@ -247,7 +247,7 @@ function viewModel() {
       self.markers[i].setMap(null);
     }
     document.getElementById('visibleLocations').innerHTML = null;
-  }
+  };
 
   // switch on certain marker types
   self.switchOn = function(category) {
@@ -261,7 +261,7 @@ function viewModel() {
       }
     }
     document.getElementById('visibleLocations').innerHTML = listItems;
-  }
+  };
 
 
   google.maps.event.addDomListener(window, 'load', self.initMap);
@@ -278,9 +278,9 @@ function viewModel() {
     map.setCenter(center);
   });
 
-};
+}
 
 
 
-ko.applyBindings(new viewModel);
+ko.applyBindings(new viewModel());
 
