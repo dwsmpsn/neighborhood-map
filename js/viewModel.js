@@ -1,4 +1,5 @@
 var map;
+var largeInfoWindow;
 var clientID = 'LERAAYP3BV01BQZY0FLIBIBCM0U40FZEWLLEL03C2QR0NI2V';
 var clientSecret = '1TZ0ZLXEZ33DA3E2KF3MLMYHL2DDSWQGS10EW1L0ZG2BVQ1L';
 
@@ -43,52 +44,42 @@ function ViewModel() {
       title: 'Pequod\'s Pizza', 
       location: {lat: 41.921914, lng: -87.664307}, 
       type: 'Food',
-      isVisible: ko.observable(true)
     },{
       title: 'Kuma\'s Too',
       location: {lat: 41.933072, lng: -87.646153},
       type: 'Food',
-      isVisible: ko.observable(true)
     },{
       title: 'Piece Brewery and Pizzeria',
       location: {lat: 41.910484, lng: -87.676154},
       type: 'Food',
-      isVisible: ko.observable(true)
     },{
       title: 'Cheesie\'s Pub & Grub',
       location: {lat: 41.940897, lng: -87.653883},
       type: 'Food',
-      isVisible: ko.observable(true)
     },{
       title: 'Concord Music Hall',
       location: {lat: 41.918797, lng: -87.690044},
       type: 'Entertainment',
-      isVisible: ko.observable(true)
     },{
       title: 'Music Box Theatre',
       location: {lat: 41.950181, lng: -87.663821},
       type: 'Entertainment',
-      isVisible: ko.observable(true)
     },{
       title: 'Lincoln Hall',
       location: {lat: 41.925994, lng: -87.649752},
       type: 'Entertainment',
-      isVisible: ko.observable(true)
     },{
       title: 'Micro Center',
       location: {lat: 41.930364, lng: -87.683174},
       type: 'Shopping',
-      isVisible: ko.observable(true)
     },{
       title: 'Chicago Music Exchange',
       location: {lat: 41.942188, lng: -87.670538},
       type: 'Shopping',
-      isVisible: ko.observable(true)
     },{
       title: 'Dave\'s Records',
       location: {lat: 41.929851, lng: -87.643366},
       type: 'Shopping',
-      isVisible: ko.observable(true)
     }
   ]);
 
@@ -102,7 +93,7 @@ function ViewModel() {
     });
 
     // instantiating an infowindow variable
-    var largeInfoWindow = new google.maps.InfoWindow();
+    largeInfoWindow = new google.maps.InfoWindow();
 
 
     // styling default and highlighted markers
@@ -141,32 +132,34 @@ function ViewModel() {
         });
 
         // event listener to open the infowindow for the marker
-        marker.addListener('click', populateWorkaround());
+        marker.addListener('click', self.populateWorkaround());
 
         // listener events to highlight markers
-        marker.addListener('mouseover', setIconWorkaround(highlightedIcon));
-        marker.addListener('mouseout', setIconWorkaround(resultIcon));
+        marker.addListener('mouseover', self.setIconWorkaround(highlightedIcon));
+        marker.addListener('mouseout', self.setIconWorkaround(resultIcon));
         // push the new marker to the array of markers
         self.markers().push(marker);
       }
 
-      function populateWorkaround() {
-        return function() {
-          self.populateInfoWindow(this, largeInfoWindow);
-        };
-      }
-
-      function setIconWorkaround(icon) {
-        return function() {
-          this.setIcon(icon);
-        };
-      }
+      
     };
 
     self.createMarkerArray();
     // calling show all to populate markers and side list
     self.showAll();
   };
+
+  self.populateWorkaround = function() {
+    return function() {
+      self.populateInfoWindow(this, largeInfoWindow);
+    };
+  }
+
+  self.setIconWorkaround = function(icon) {
+    return function() {
+      this.setIcon(icon);
+    };
+  }
 
   // function to populate the infowindow when a marker is clicked
   self.populateInfoWindow = function(marker, infowindow) {

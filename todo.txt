@@ -1,0 +1,29 @@
+TO DO
+
+JS
+- animate marker when it is clicked and when list item is clicked
+- in the $.getJSON request, change the fail result from console.log to a message
+- in the self.showAll function:
+  - use an observable array instead of listItems
+  - use Knockout's foreach binding to loop through the array
+  - use text binding to log each item to the DOM
+  - clicking on listItems must animate the marker using click binding
+  - when resetting selection back to default, use visible binding instead
+- do the above for hideAll too
+
+
+
+
+
+
+self.switchOn = function(category) {
+  var listItems = '';
+  for (var i = 0; i < self.markers.length; i++) {
+    if (self.markers[i].category == category) {
+      self.markers[i].setMap(map);
+      listItems += '<li>' + self.markers[i].title + '</li>';
+    } else {
+      self.markers[i].setMap(null);
+    }
+  }
+};
