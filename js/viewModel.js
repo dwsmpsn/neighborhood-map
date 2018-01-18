@@ -15,16 +15,27 @@ function ViewModel() {
   self.selectedCategory = ko.observable('');
   self.visibleLocations = ko.observableArray([]);
 
-  self.filteredLocations = ko.computed(function() {
+  self.filteredList = ko.computed(function() {
     var filter = self.selectedCategory();
     if (!filter) {
+      for (var i = 0; i < self.markers().length; i++) {
+        self.markers()[i].setMap(map);
+      }
       return self.markers();
     } else {
+      for (var i = 0; i < self.markers().length; i++) {
+        if (self.markers()[i].category != filter) {
+          self.markers()[i].setMap(null);
+        } else {
+          self.markers()[i].setMap(map);
+        }
+      }
       return ko.utils.arrayFilter(self.markers(), function(i) {
         return i.category == filter;
       });
     }
   });
+
 
   // a collection of some of my favorite places on the north side
   self.locations = ko.observableArray([
