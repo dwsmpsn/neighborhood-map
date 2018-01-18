@@ -93,8 +93,8 @@ function viewModel() {
 
     // uses the array of locations to create an array of markers
     // added anonymous function for closure
-    for (var i = 0; i < self.locations().length; i++) {
-      (function() {
+    self.createMarkerArray = function() {
+      for (var i = 0; i < self.locations().length; i++) {
         var resultIcon;
         if (self.locations()[i].type === 'Food') {
           resultIcon = foodIcon;
@@ -132,11 +132,12 @@ function viewModel() {
         marker.addListener('mouseout', function() {
           this.setIcon(resultIcon);
         });
-
         // push the new marker to the array of markers
         self.markers.push(marker);
-      }());
-    }
+      };
+    };
+
+    self.createMarkerArray();
     // calling show all to populate markers and side list
     self.showAll();
   };
