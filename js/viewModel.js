@@ -313,7 +313,7 @@ function ViewModel() {
 }
 
 function newViewModel() {
-  ko.applyBindings(new ViewModel);
+  ko.applyBindings(new ViewModel());
 }
 
 
