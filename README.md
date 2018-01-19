@@ -1,5 +1,9 @@
-# To run the app, just open index.html in the browser of your choice!
+# Dylan's Neighborhood Map
 
+## To run the app:
+To run the app, just open index.html in the browser of your choice!
+
+## Explanation
 This is my shot at the Udacity neighborhood map project. While it may not be flashy, I'm proud of the work I've done and the functionality I've incorporated.
 
 When this app loads, 10 points of interest are displayed on the map. On the left side of the screen, there are two buttons, Show All and Hide All, which will restore all markers to the map or hide them all, respectively. Clicking on any of these markers will bring up information and a street view for the location.
@@ -8,9 +12,6 @@ Below the buttons, a dropdown list can be used to select the type of location yo
 
 I used the Foursquare API to call up the phone number for each location, which is displayed on each marker's infowindow. This was an exercise in frustration but I learned a great deal about third party API documentation and navigation. The implementation may be small, but the learning opportunity was not.
 
-## Note:
-- Google API is not loaded synchronously because after porting my js work into the knockout format, I kept getting a "google is not defined error". The only way I could fix it was to make sure the API loaded before the JS files.
-  - **update**: it was working asynchronously and then stopped again. I have no idea what the issue is and cannot find a solution.
 
 ## Sources
 
