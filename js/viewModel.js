@@ -294,9 +294,7 @@ function ViewModel() {
     }
   };
 
-
-  google.maps.event.addDomListener(window, 'load', self.initMap);
-  google.maps.event.addDomListener(window, 'resize', function() {
+  self.centerAndBoundMap = function() {
     var center = map.getCenter();
     var bounds = new google.maps.LatLngBounds();
     // extend the boundaries of the map for each marker
@@ -307,7 +305,13 @@ function ViewModel() {
     // move center of map with window resize
     google.maps.event.trigger(map, 'resize');
     map.setCenter(center);
+  };
+
+  google.maps.event.addDomListener(window, 'load', function() {
+    self.initMap();
+    self.centerAndBoundMap();
   });
+  google.maps.event.addDomListener(window, 'resize', self.centerAndBoundMap);
 
 
 }
