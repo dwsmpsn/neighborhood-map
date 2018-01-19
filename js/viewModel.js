@@ -225,38 +225,35 @@ function ViewModel() {
               pitch: 10
             }
           };
-
-          // FOURSQUARE EXPERIMENTING
-          // my map center Lat/Long, just to use for proximity
-          var near = '41.932272,-87.668119';
-          var name = marker.title;
-          // stripping the spaces out of the venue name
-          name = name.replace(/\s/g, '');
-          // constructing the URL that will make the API call
-          var requestURL = 'https://api.foursquare.com/v2/venues/search?ll=' +
-            near + '&client_id=' + clientID + '&client_secret=' + clientSecret + 
-            '&query=' + name + '&v=20180117';
-
-          // a very frustrating exercise in Foursquare API usage,
-          // but I survived.
-          $.getJSON(requestURL).done(function(input) {
-            var venuePhone = input.response.venues[0].contact.formattedPhone;
-            infowindow.setContent('<div>' + marker.title + 
-              '</div><div id="pano"></div><div>Phone Number: <span id="phone">' +
-              venuePhone + '</span></div>');
-            // putting the panorama in the infowindow
-            var panorama = new google.maps.StreetViewPanorama(
-              document.getElementById('pano'), panoramaOptions);
-          }).fail(function() {
-            window.alert('Foursquare information could not be retrieved. Please refresh to try again.');
-          });
-          // END FOURSQUARE EXPERIMENT //
-
-          
         } else {
           infowindow.setContent('<div>' + marker.title + '</div>' + 
             '<div>No Street View Found</div>');
         }
+        // FOURSQUARE EXPERIMENTING
+        // my map center Lat/Long, just to use for proximity
+        var near = '41.932272,-87.668119';
+        var name = marker.title;
+        // stripping the spaces out of the venue name
+        name = name.replace(/\s/g, '');
+        // constructing the URL that will make the API call
+        var requestURL = 'https://api.foursquare.com/v2/venues/search?ll=' +
+          near + '&client_id=' + clientID + '&client_secret=' + clientSecret + 
+          '&query=' + name + '&v=20180117';
+
+        // a very frustrating exercise in Foursquare API usage,
+        // but I survived.
+        $.getJSON(requestURL).done(function(input) {
+          var venuePhone = input.response.venues[0].contact.formattedPhone;
+          infowindow.setContent('<div>' + marker.title + 
+            '</div><div id="pano"></div><div>Phone Number: <span id="phone">' +
+            venuePhone + '</span></div>');
+          // putting the panorama in the infowindow
+          var panorama = new google.maps.StreetViewPanorama(
+            document.getElementById('pano'), panoramaOptions);
+        }).fail(function() {
+          window.alert('Foursquare information could not be retrieved. Please refresh to try again.');
+        });
+        // END FOURSQUARE EXPERIMENT //
       };
 
 
@@ -312,8 +309,11 @@ function ViewModel() {
     map.setCenter(center);
   });
 
+
 }
 
+function newViewModel() {
+  ko.applyBindings(new ViewModel);
+}
 
-ko.applyBindings(new ViewModel());
 

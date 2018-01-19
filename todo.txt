@@ -1,4 +1,0 @@
-TO DO
-
-JS
-- animate marker when it is clicked and when list item is clicked
